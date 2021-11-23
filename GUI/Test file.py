@@ -48,7 +48,7 @@ top  = [[sg.Text('Current Status?', size=(50,1), justification='c', pad=BPAD_TOP
 
 block_2 = [[sg.Text('Altimeter', font='Any 20')],
             [sg.T('Current Altitude')],
-            [sg.Image(r'C:\Users\maxep\OneDrive\Documents\Cansat Files\altimeter_test.png')]  ] #picture to altimeter
+            [sg.Image(filename='GUI\Altimeter_test.png')]  ] #picture to altimeter
 
 block_3 = [[sg.Text('Block 3', font='Any 20')],
             [sg.Input(), sg.Text('Some Text')],
@@ -56,7 +56,7 @@ block_3 = [[sg.Text('Block 3', font='Any 20')],
 
 block_4 = [[sg.Text('Speedometer', font='Any 20')],
             [sg.T('Current Velocity')],
-            [sg.Image(r'C:\Users\maxep\OneDrive\Documents\Cansat Files\speedometer_test.png')]  ] #picture to speedometer
+            [sg.Image(filename='GUI\speedometer_test.png')]  ] #picture to speedometer
 
 block_5 = [[sg.Text('Block 5', font='Any 20')],
             [sg.T('This is some random text')],
