@@ -2,7 +2,7 @@ import csv
 import string
 import time
 
-TEAM_ID = "1000"
+TEAM_ID = "1063" #this is the final and correct team id
 PACKET_TYPE = 67
 PACKET_TYPE2 = 80
 
