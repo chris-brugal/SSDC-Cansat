@@ -6,6 +6,7 @@ import datetime
 from datetime import date
 import time
 import math
+import os
 
 from time import gmtime, strftime
 
@@ -32,6 +33,7 @@ theme_dict = {'BACKGROUND': '#2B475D',
 # sg.theme_add_new('Dashboard', theme_dict)     # if using 4.20.0.1+
 sg.LOOK_AND_FEEL_TABLE['Dashboard'] = theme_dict
 sg.theme('Dashboard')
+directory = format(os.getcwd())
 
 BORDER_COLOR = '#C7D5E0'
 DARK_HEADER_COLOR = '#1B2838'
@@ -76,7 +78,7 @@ top  = [[sg.Text('Current Status?', size=(50,1), justification='c', pad=BPAD_TOP
 
 block_2 = [[sg.Text('Altimeter', font='Any 20')],
             [sg.T('Current Altitude')],
-            [sg.Image(filename='GUI\Altimeter_test.png')]  ] #picture to altimeter
+            [sg.Image((directory+'/GUI/altimeter_test.png'))]  ] #picture to altimeter
 
 block_6 = [[sg.Text('Graph Test', font='Any 20')],
             [graph]]
@@ -86,7 +88,7 @@ block_3 = [[sg.Text('Close', font='Any 20')],
 
 block_4 = [[sg.Text('Speedometer', font='Any 20')],
             [sg.T('Current Velocity')],
-            [sg.Image(filename='GUI\speedometer_test.png')]  ] #picture to speedometer
+            [sg.Image((directory+'/GUI/speedometer_test.png'))]  ] #picture to speedometer
 
 block_5 = [[sg.Text('Block 5', font='Any 20')],
             [sg.T('This is some random text')],
