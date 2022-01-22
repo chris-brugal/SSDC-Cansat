@@ -20,8 +20,8 @@ with open('Flight_'+TEAM_ID+'_'+chr(PACKET_TYPE)+'.csv', 'w', newline='') as fil
 
         for i in range(1000):
             rand = random.randint(1,1000)
-            writer.writerow([time.strftime("%H:%M:%S", time.localtime()),i ,rand])
-            time.sleep(1)
+            writer.writerow([time.strftime("%H:%M:%S", time.localtime()),i ,i])
+            #time.sleep(1)
 
        # writer.writerow([time.strftime("%H:%M:%S", time.localtime()), 0, 0])
         #time.sleep(1)

@@ -38,7 +38,7 @@ def init():                              #set first point
 
 def animate(i):                         #draws line
 
-    data = pd.read_csv('/Telemetry/Flight_1063_C.csv')
+    data = pd.read_csv('Flight_1063_C.csv')
     xArray = data['Count']
     yArray = data['Altitude']
 
