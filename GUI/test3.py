@@ -4,27 +4,30 @@ from matplotlib.pyplot import figure
 from matplotlib import animation
 import csv
 import matplotlib as mpl
+import pandas as pd
 mpl.rcParams['toolbar'] = 'None'
 
-yArray = [[0]]
-xArray = [[0]]
+yArray = []
+xArray = []
 i=0
 
-with open('Flight_1063_C.csv', newline='') as csvfile:
-    reader = csv.reader(csvfile, delimiter=',')
-    for row in reader:
-        if (i > 0):
+
+
+#with open('Flight_1063_C.csv', newline='') as csvfile:
+  #  reader = csv.reader(csvfile, delimiter=',')
+  #  for row in reader:
+  #      if (i > 0):
             #print (row[1])
-            yArray.append([row[2]])
-            xArray.append([row[1]])
-        i+=1
+   #         yArray.append([row[2]])
+  #          xArray.append([row[1]])
+ #       i+=1
 
 
 fig, axis = plt.subplots()
 fig.set_size_inches(3, 3)
-axis.set_title('Altitude (M) Time (s)')
-axis.set_xlabel('time')
-axis.set_ylabel('altitude')
+axis.set_title('Altitude (M) vs Time (s)')
+axis.set_xlabel('Time')
+axis.set_ylabel('Altitude')
 line, = axis.plot([], [], '-ko')   #customize line (color, dots, etc)
 axis.margins(0.05)                  #makes it more fluid
 
@@ -34,6 +37,11 @@ def init():                              #set first point
     return line,
 
 def animate(i):                         #draws line
+
+    data = pd.read_csv('/Telemetry/Flight_1063_C.csv')
+    xArray = data['Count']
+    yArray = data['Altitude']
+
     win = 20                           #maximum window size
     imin = min(max(0, i - win), len(xArray) - win)      #gets current window range
     xdata = xArray[imin:i]          #gets x values between range
