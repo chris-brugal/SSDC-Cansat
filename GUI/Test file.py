@@ -118,9 +118,9 @@ window = sg.Window('Dashboard PySimpleGUI-Style', layout, margins=(0,0), locatio
 window.maximize()
 
 while True:             # Event Loop
-    event, values = window.read()
+    event, values = window.read(timeout=10)
     window.refresh() #still does nothing for some reason and clock does not change
-    if event == sg.WIN_CLOSED or event == 'Close window':
+    if event == sg.WIN_CLOSED or event == 'Close Window':
         break
 
     graph.erase()
