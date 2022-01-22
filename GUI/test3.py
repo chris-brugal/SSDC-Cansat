@@ -28,7 +28,7 @@ fig.set_size_inches(3, 3)
 axis.set_title('Altitude (M) vs Time (s)')
 axis.set_xlabel('Time')
 axis.set_ylabel('Altitude')
-line, = axis.plot([], [], '-ko')   #customize line (color, dots, etc)
+line, = axis.plot([], [], '-b')   #customize line (color, dots, etc)
 axis.margins(0.05)                  #makes it more fluid
 
 
@@ -51,7 +51,7 @@ def animate(i):                         #draws line
     axis.autoscale()                   #renumbers x axis
     return line,
 
-anim = animation.FuncAnimation(fig, animate, init_func=init, interval=1000)
+anim = animation.FuncAnimation(fig, animate, init_func=init, interval=50)
 
 plt.show()
 
