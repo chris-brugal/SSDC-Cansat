@@ -115,7 +115,7 @@ layout = [[sg.Column(top_banner, size=(1000, 60), pad=(0,0), background_color=DA
         
 
 window = sg.Window('Dashboard PySimpleGUI-Style', layout, margins=(0,0), location=(0,0), background_color=BORDER_COLOR, no_titlebar=True, grab_anywhere=True).finalize()
-window.maximize()
+#window.maximize()
 
 while True:             # Event Loop
     event, values = window.read(timeout=10)
