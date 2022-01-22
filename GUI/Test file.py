@@ -7,13 +7,12 @@ from datetime import date
 import time
 import math
 import os
-
 from time import gmtime, strftime
-
 from PySimpleGUI.PySimpleGUI import Sizer
+
+
 strftime("%Y-%m-%d %H:%M:%S", gmtime())
 '2009-01-05 22:14:39'
-
 
 def clock():
     while True:
@@ -83,8 +82,8 @@ block_2 = [[sg.Text('Altimeter', font='Any 20')],
 block_6 = [[sg.Text('Graph Test', font='Any 20')],
             [graph]]
 
-block_3 = [[sg.Text('Close', font='Any 20')],
-            [sg.Button('Send'), sg.Button('CLOSE')]] #does nothing
+block_3 = [[sg.Text('Options', font='Any 20')],
+            [sg.Button('Calibrate'), sg.Button('Start Communication'), sg.Button('Close Window')]] #does nothing
 
 block_4 = [[sg.Text('Speedometer', font='Any 20')],
             [sg.T('Current Velocity')],
@@ -97,8 +96,8 @@ block_5 = [[sg.Text('Block 5', font='Any 20')],
             [sg.T('This is some random text')]]
 
 
-layout = [[sg.Column(top_banner, size=(1920, 60), pad=(0,0), background_color=DARK_HEADER_COLOR,justification='c')],
-          [sg.Column(top, size=(1800, 90), pad=BPAD_TOP)],
+layout = [[sg.Column(top_banner, size=(1000, 60), pad=(0,0), background_color=DARK_HEADER_COLOR,justification='c')],
+          [sg.Column(top, size=(1500, 90), pad=BPAD_TOP)],
 
           [sg.Column([[sg.Column(block_2, size=(450,300), pad=BPAD_LEFT_INSIDE)],
                       [sg.Column(block_4, size=(450,225), pad=BPAD_LEFT_INSIDE)],
@@ -121,12 +120,13 @@ window.maximize()
 while True:             # Event Loop
     event, values = window.read()
     window.refresh() #still does nothing for some reason and clock does not change
-    if event == sg.WIN_CLOSED or event == 'CLOSE':
+    if event == sg.WIN_CLOSED or event == 'Close window':
         break
 
     graph.erase()
     draw_axis()
     prev_x = prev_y = None
+    print("hello")
     for x in range(-SIZE_X,SIZE_X):
         y = math.sin(x/25)*50
         if prev_x is not None:
