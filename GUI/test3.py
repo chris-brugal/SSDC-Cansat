@@ -17,7 +17,6 @@ fig.set_size_inches(3, 3)
 axis.set_title('Altitude (M) vs Time (s)')
 axis.set_xlabel('Time')
 axis.set_ylabel('Altitude')
-line, = axis.plot([], [], '-ko')   #customize line (color, dots, etc)
 axis.margins(0.05)                  #makes it more fluid
 
 plotlays, plotcols = [3], ["orange","purple", "brown"]

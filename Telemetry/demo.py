@@ -32,4 +32,4 @@ while i < 1000:
         writer.writerow([time.strftime("%H:%M:%S", time.localtime()),i ,rand, rand2, rand3])
         print (i)
 
-    time.sleep(1)
+    time.sleep(.01)
