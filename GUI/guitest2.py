@@ -1,6 +1,30 @@
 import PySimpleGUI as sg
 import time
 
+import matplotlib.pyplot as plt 
+from matplotlib.pyplot import figure 
+from matplotlib import animation
+import matplotlib as mpl
+import pandas as pd
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import numpy as np
+
+
+
+_VARS = {'window': False,
+         'fig_agg': False,
+         'pltFig': False}
+
+# Helper Functions
+
+
+def draw_figure(canvas, figure):
+    figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
+    figure_canvas_agg.draw()
+    figure_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
+    return figure_canvas_agg
+
+
 ID = 1063
 PT1 = 'C'
 PT2 = 'P'
@@ -37,19 +61,57 @@ third_row = [[sg.Text('Packet Count 1: '+str(PC1), size=(17), font='Any 16', bac
 layout = [[top_banner],
           [second_row],
           [third_row],
-          [sg.Text('Graph')],
+          [sg.Canvas(key='figCanvas')],
           [sg.Text('Graph')],
           [sg.Text('command box')]]
 
-window = sg.Window('test window', layout, margins=(0,0), location=(0,0), finalize=True)
+_VARS['window'] = sg.Window('test window', layout, margins=(0,0), location=(0,0), finalize=True)
 
-window.maximize()
+
+def getData():
+    data = pd.read_csv('Flight_1063_C.csv')
+    xArray = data['Count']
+    yArray = data['Altitude']
+    gyro = data['Gyro']
+    temp = data['Temp']
+    return (xArray, yArray)
+
+
+
+def drawChart():
+    _VARS['pltFig'] = plt.figure()
+    dataXY = (getData)()
+    plt.plot(dataXY[0], dataXY[1], '-k')
+    _VARS['fig_agg'] = draw_figure(
+        _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
+
+
+# Recreate Synthetic data, clear existing figre and redraw plot.
+
+def updateChart():
+    _VARS['fig_agg'].get_tk_widget().forget()
+    dataXY = makeSynthData()
+    # plt.cla()
+    plt.clf()
+    plt.plot(dataXY[0], dataXY[1], '.k')
+    _VARS['fig_agg'] = draw_figure(
+        _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
+
+# \\  -------- PYPLOT -------- //
+
+
+drawChart()
+
+
+
+
+_VARS['window'].maximize()
 
 while True:
-    event, values = window.read(timeout=10)
-    window['time'].update(clock())
-    window['gpsTime'].update('GPS Time: ' + clock())
+    event, values = _VARS['window'].read(timeout=10)
+    _VARS['window']['time'].update(clock())
+    _VARS['window']['gpsTime'].update('GPS Time: ' + clock())
     if event in (None, 'Close'):
         break
 
-window.close()
+_VARS['window'].close()

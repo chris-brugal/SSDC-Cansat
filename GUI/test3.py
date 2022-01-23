@@ -1,8 +1,6 @@
-import numpy as np
 import matplotlib.pyplot as plt 
 from matplotlib.pyplot import figure 
 from matplotlib import animation
-import csv
 import matplotlib as mpl
 import pandas as pd
 mpl.rcParams['toolbar'] = 'None'
