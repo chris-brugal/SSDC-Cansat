@@ -12,14 +12,14 @@ i=0
 
 fig, axis = plt.subplots()
 fig.set_size_inches(3, 3)
-axis.set_title('Altitude (M) vs Time (s)')
+axis.set_title('Pointing Error (deg) vs Time (s)')
 axis.set_xlabel('Time')
 axis.set_ylabel('Altitude')
 axis.margins(0.05)                  #makes it more fluid
 
-plotlays, plotcols = [3], ["orange","purple", "brown"]
+plotlays, plotcols = [1], ["blue","red", "brown"]
 lines = []
-for index in range(3):
+for index in range(1):
     lobj = axis.plot([],[],lw=2,color=plotcols[index])[0]
     lines.append(lobj)
 
@@ -45,8 +45,8 @@ def animate(i):                         #draws line
     gyroData = gyro[imin:i]
     tempData = temp[imin:i]
     lines[0].set_data(xdata, ydata)     #sets line
-    lines[1].set_data(xdata, gyroData)
-    lines[2].set_data(xdata, tempData)
+    #lines[1].set_data(xdata, gyroData)
+    #lines[2].set_data(xdata, tempData)
     axis.relim()                       #renumbers x axis
     axis.autoscale()   
                     #renumbers x axis

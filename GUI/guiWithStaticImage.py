@@ -1,29 +1,12 @@
 import PySimpleGUI as sg
 import time
 import os
-import matplotlib.pyplot as plt 
-from matplotlib.pyplot import figure 
-from matplotlib import animation
-import matplotlib as mpl
-import pandas as pd
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import numpy as np
-
-
 
 _VARS = {'window': False,
          'fig_agg': False,
          'pltFig': False}
 
 # Helper Functions
-
-
-def draw_figure(canvas, figure):
-    figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
-    figure_canvas_agg.draw()
-    figure_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
-    return figure_canvas_agg
-
 
 ID = 1063
 PT1 = 'C'
@@ -60,54 +43,33 @@ third_row = [[sg.Text('Packet Count 1: '+str(PC1), size=(17), font='Any 16', bac
                sg.Text('CMD Echo: '+CMD_ECHO, size=(31), font='Any 16', background_color='#1B2838'),
                sg.Text('Packet Count 2: '+str(PC2), size=(18), font='Any 16', background_color='#1B2838')]]
 
-#fourth_row = [[sg.Image(directory+'/GUI/speedometer_test.png')]]
+fourth_row = [[sg.Image(directory+'/GUI/images/altVsTimeDemo.PNG'),
+               sg.Image(directory+'/GUI/images/tempVsTimeDemo.PNG'),
+               sg.Image(directory+'/GUI/images/voltVSTimeDemo.PNG'),
+               sg.Image(directory+'/GUI/images/gyroVsTimeDemo.PNG'),
+               sg.Image(directory+'/GUI/images/accelVsTimeDemo.PNG')]]
+
+fifth_row = [[sg.Image(directory+'/GUI/images/gpsLATVsTime.PNG'),
+               sg.Image(directory+'/GUI/images/gpsLONGVsTime.PNG'),
+               sg.Image(directory+'/GUI/images/gpsALTVsTime.PNG'),
+               sg.Image(directory+'/GUI/images/magVsTimeDemo.PNG'),
+               sg.Image(directory+'/GUI/images/peVsTime.PNG')]]
+
+sixth_row = [[sg.Text('CMD', size=(16), font = 'Any 16', background_color='#1B2838'),
+              sg.Input(size=(30)),
+              sg.Button('Send',size=(18), font='Any 16'),
+              sg.Text(' '*100),
+              sg.Image(directory+'/GUI/images/gpsLATVsTime.PNG')]]
 
 layout = [[top_banner],
           [second_row],
           [third_row],
-          [sg.Canvas(key='figCanvas')],  #this is the graph
-          [sg.Text('Graph')],
-          [sg.Text('command box')]]
+          [fourth_row],
+          [fifth_row],
+          [sixth_row]]
 
 _VARS['window'] = sg.Window('test window', layout, margins=(0,0), location=(0,0), finalize=True)
 
-
-def getData():
-    data = pd.read_csv('Flight_1063_C.csv')
-    xArray = data['Count']
-    yArray = data['Altitude']
-    gyro = data['Gyro']
-    temp = data['Temp']
-    return (xArray, yArray)
-
-
-
-def drawChart():
-    _VARS['pltFig'] = plt.figure()
-    dataXY = (getData)()
-    plt.plot(dataXY[0], dataXY[1], '-k')
-    _VARS['fig_agg'] = draw_figure(
-        _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
-
-
-# Recreate Synthetic data, clear existing figre and redraw plot.
-
-#create clock to keep track of frame in order to update graph??
-#use panda to trigger new update in csv file and send to graph to update??
-
-def updateChart():
-    _VARS['fig_agg'].get_tk_widget().forget()
-    dataXY = getData()
-    # plt.cla()
-    plt.clf()
-    plt.plot(dataXY[0], dataXY[1], '.k')
-    _VARS['fig_agg'] = draw_figure(
-        _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
-
-# \\  -------- PYPLOT -------- //
-
-
-drawChart()
 
 
 _VARS['window'].maximize()
