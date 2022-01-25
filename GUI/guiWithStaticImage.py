@@ -55,11 +55,11 @@ fifth_row = [[sg.Image(directory+'/GUI/images/gpsLATVsTime.PNG'),
                sg.Image(directory+'/GUI/images/magVsTimeDemo.PNG'),
                sg.Image(directory+'/GUI/images/peVsTime.PNG')]]
 
-sixth_row = [[sg.Text('CMD', size=(16), font = 'Any 16', background_color='#1B2838'),
+sixth_row = [[sg.Text('CMD', size=(8), font = 'Any 26', background_color='#1B2838'),
               sg.Input(size=(30)),
               sg.Button('Send',size=(18), font='Any 16'),
               sg.Text(' '*100),
-              sg.Image(directory+'/GUI/images/gpsLATVsTime.PNG')]]
+              sg.Image(directory+'/GUI/images/Legend1.png')]]
 
 layout = [[top_banner],
           [second_row],
