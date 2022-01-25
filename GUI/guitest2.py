@@ -62,12 +62,19 @@ third_row = [[sg.Text('Packet Count 1: '+str(PC1), size=(17), font='Any 16', bac
 
 #fourth_row = [[sg.Image(directory+'/GUI/speedometer_test.png')]]
 
+sixth_row = [[sg.Text('CMD', size=(8), font = 'Any 26', background_color='#1B2838'),
+              sg.Input(size=(30)),
+              sg.Button('Send',size=(18), font='Any 16'),
+              sg.Text(' '*100),
+              sg.Image(directory+'/GUI/images/Legend1.png')]]
+
+
 layout = [[top_banner],
           [second_row],
           [third_row],
           [sg.Canvas(key='figCanvas')],  #this is the graph
           [sg.Text('Graph')],
-          [sg.Text('command box')]]
+          [sixth_row]]
 
 _VARS['window'] = sg.Window('test window', layout, margins=(0,0), location=(0,0), finalize=True)
 
@@ -78,7 +85,7 @@ def getData():
     yArray = data['Altitude']
     gyro = data['Gyro']
     temp = data['Temp']
-    return (xArray, yArray)
+    return (xArray, yArray, gyro)
 
 
 
@@ -86,6 +93,7 @@ def drawChart():
     _VARS['pltFig'] = plt.figure()
     dataXY = (getData)()
     plt.plot(dataXY[0], dataXY[1], '-k')
+    plt.plot(dataXY[0], dataXY[2], '-b')
     _VARS['fig_agg'] = draw_figure(
         _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
 
