@@ -94,6 +94,7 @@ def drawChart():
     dataXY = (getData)()
     plt.plot(dataXY[0], dataXY[1], '-k')
     plt.plot(dataXY[0], dataXY[2], '-b')
+    _VARS['pltFig'].set_size_inches(3,3)
     _VARS['fig_agg'] = draw_figure(
         _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
 
