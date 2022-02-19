@@ -138,7 +138,6 @@ def drawChart(graph):  # graph is the graph number set as an integer
     if (graph == 9):
         setyAxis()
     _VARS['pltAxis'+str(graph)].set_xlabel('Time')
-    
     _VARS['pltAxis'+str(graph)].margins(0.05)  
 
     plt.plot(dataXY[0], dataXY[1], '-k')
@@ -165,7 +164,7 @@ def updateChart(graph):
 
 # \\  -------- PYPLOT -------- //
 
-i=0;
+i=0
 while (i < 10):
     drawChart(i)
     i+= 1
@@ -184,8 +183,10 @@ def animate(PC1):                         #draws line
     lines[0].set_data(xdata, ydata)     #sets line
     #lines[1].set_data(xdata, gyroData)
     #lines[2].set_data(xdata, tempData)
-    axis.relim()                       #renumbers x axis
-    axis.autoscale()   
+    i = 0
+    while (i < 10):
+        _VARS['pltAxis'+str(i)].relim()                       #renumbers x axis
+        _VARS['pltAxis'+str(i)].autoscale()   
                     #renumbers x axis
     return lines,
 
