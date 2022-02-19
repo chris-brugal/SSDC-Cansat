@@ -125,6 +125,7 @@ def updateChart():
         _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
 
 # \\  -------- PYPLOT -------- //
+##comment
 
 i=0;
 while (i < 10):
