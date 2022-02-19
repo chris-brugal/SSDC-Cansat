@@ -67,10 +67,10 @@ fourth_row = [[sg.Canvas(key='figCanvas0'),
                sg.Canvas(key='figCanvas4'),]]
 
 fifth_row = [[sg.Canvas(key='figCanvas5'),
-               sg.Canvas(key='figCanvas6'),
-               sg.Canvas(key='figCanvas7'),
-               sg.Canvas(key='figCanvas8'),
-               sg.Canvas(key='figCanvas9'),]]
+              sg.Canvas(key='figCanvas6'),
+              sg.Canvas(key='figCanvas7'),
+              sg.Canvas(key='figCanvas8'),
+              sg.Canvas(key='figCanvas9'),]]
 
 sixth_row = [[sg.Text('CMD', size=(8), font = 'Any 26', background_color='#1B2838'),
               sg.Input(size=(30)),
@@ -114,18 +114,17 @@ def drawChart(graph):  # graph is the graph number set as an integer
 #create clock to keep track of frame in order to update graph??
 #use panda to trigger new update in csv file and send to graph to update??
 
-def updateChart():
-    #canvas = 'figCanvas' + str(graph)
+def updateChart(graph):
+    canvas = 'figCanvas' + str(graph)
     _VARS['fig_agg'].get_tk_widget().forget()
     dataXY = getData()
     # plt.cla()
     plt.clf()
     plt.plot(dataXY[0], dataXY[1], '.k')
     _VARS['fig_agg'] = draw_figure(
-        _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
+        _VARS['window'][canvas].TKCanvas, _VARS['pltFig'])
 
 # \\  -------- PYPLOT -------- //
-##comment
 
 i=0;
 while (i < 10):
