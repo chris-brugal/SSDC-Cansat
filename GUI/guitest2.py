@@ -114,6 +114,7 @@ def updateChart():
         _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
 
 # \\  -------- PYPLOT -------- //
+##comment
 
 
 drawChart()
