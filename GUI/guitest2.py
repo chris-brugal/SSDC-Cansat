@@ -13,7 +13,17 @@ import numpy as np
 
 _VARS = {'window': False,
          'fig_agg': False,
-         'pltFig': False}
+         'pltFig': False,
+         'pltAxis0': False,
+         'pltAxis1': False,
+         'pltAxis2': False,
+         'pltAxis3': False,
+         'pltAxis4': False,
+         'pltAxis5': False,
+         'pltAxis6': False,
+         'pltAxis7': False,
+         'pltAxis8': False,
+         'pltAxis9': False}
 
 # Helper Functions
 
@@ -82,8 +92,8 @@ sixth_row = [[sg.Text('CMD', size=(8), font = 'Any 26', background_color='#1B283
 layout = [[top_banner],
           [second_row],
           [third_row],
-          [fourth_row],  #this is the graph
-          [fifth_row],
+          [fourth_row],  #this is the graphs
+          [fifth_row],   #this is also 5 graphs
           [sixth_row]]
 
 _VARS['window'] = sg.Window('test window', layout, margins=(0,0), location=(0,0), finalize=True)
@@ -95,13 +105,42 @@ def getData():
     yArray = data['Altitude']
     gyro = data['Gyro']
     temp = data['Temp']
-    return (xArray, yArray, gyro)
+    return (xArray, yArray, gyro, temp)
 
+def setyAxis():
+    _VARS['pltAxis0'].set_ylabel('Altitude')
+    _VARS['pltAxis1'].set_ylabel('Temperature')
+    _VARS['pltAxis2'].set_ylabel('Voltage')
+    _VARS['pltAxis3'].set_ylabel('Gyro')
+    _VARS['pltAxis4'].set_ylabel('Acceleration')
+    _VARS['pltAxis5'].set_ylabel('GPS LAT')
+    _VARS['pltAxis6'].set_ylabel('GPS LONG')
+    _VARS['pltAxis7'].set_ylabel('GPS ALT')
+    _VARS['pltAxis8'].set_ylabel('MAG')
+    _VARS['pltAxis9'].set_ylabel('PE')
+    
+    _VARS['pltAxis0'].set_title('Altitude (m) vs Time(s)')
+    _VARS['pltAxis1'].set_title('Temp (c) vs Time(s)')
+    _VARS['pltAxis2'].set_title('Voltage volts) vs Time(s)')
+    _VARS['pltAxis3'].set_title('Gyro (deg) vs Time(s)')
+    _VARS['pltAxis4'].set_title('Accel (m/s) vs Time(s)')
+    _VARS['pltAxis5'].set_title('GPS LAT (deg) vs Time(s)')
+    _VARS['pltAxis6'].set_title('GPS LONG (deg) vs Time(s)')
+    _VARS['pltAxis7'].set_title('GPS ALT (deg) vs Time(s)')
+    _VARS['pltAxis8'].set_title('Mag (gaus) vs Time(s)')
+    _VARS['pltAxis9'].set_title('Pointing Error (deg) vs Time (s)')
 
 
 def drawChart(graph):  # graph is the graph number set as an integer
     _VARS['pltFig'] = plt.figure()
     dataXY = (getData)()
+    _VARS['pltAxis'+str(graph)] = plt.subplot()
+    if (graph == 9):
+        setyAxis()
+    _VARS['pltAxis'+str(graph)].set_xlabel('Time')
+    
+    _VARS['pltAxis'+str(graph)].margins(0.05)  
+
     plt.plot(dataXY[0], dataXY[1], '-k')
     plt.plot(dataXY[0], dataXY[2], '-b')
     _VARS['pltFig'].set_size_inches(3,3)
@@ -130,6 +169,25 @@ i=0;
 while (i < 10):
     drawChart(i)
     i+= 1
+
+
+def animate(PC1):                         #draws line
+
+    dataXY = (getData)()
+
+    win = 7                           #maximum window size
+    imin = min(max(0, PC1 - win), len(dataXY[0]) - win)      #gets current window range
+    xdata = dataXY[0][imin:PC1]          #gets x values between range
+    ydata = dataXY[1][imin:PC1]          #gets y values between range
+    gyroData = dataXY[2][imin:PC1]
+    tempData = dataXY[3][imin:PC1]
+    lines[0].set_data(xdata, ydata)     #sets line
+    #lines[1].set_data(xdata, gyroData)
+    #lines[2].set_data(xdata, tempData)
+    axis.relim()                       #renumbers x axis
+    axis.autoscale()   
+                    #renumbers x axis
+    return lines,
 
 
 _VARS['window'].maximize()
