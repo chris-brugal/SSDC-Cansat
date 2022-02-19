@@ -60,7 +60,17 @@ third_row = [[sg.Text('Packet Count 1: '+str(PC1), size=(17), font='Any 16', bac
                sg.Text('CMD Echo: '+CMD_ECHO, size=(31), font='Any 16', background_color='#1B2838'),
                sg.Text('Packet Count 2: '+str(PC2), size=(18), font='Any 16', background_color='#1B2838')]]
 
-#fourth_row = [[sg.Image(directory+'/GUI/speedometer_test.png')]]
+fourth_row = [[sg.Canvas(key='figCanvas0'),
+               sg.Canvas(key='figCanvas1'),
+               sg.Canvas(key='figCanvas2'),
+               sg.Canvas(key='figCanvas3'),
+               sg.Canvas(key='figCanvas4'),]]
+
+fifth_row = [[sg.Canvas(key='figCanvas5'),
+               sg.Canvas(key='figCanvas6'),
+               sg.Canvas(key='figCanvas7'),
+               sg.Canvas(key='figCanvas8'),
+               sg.Canvas(key='figCanvas9'),]]
 
 sixth_row = [[sg.Text('CMD', size=(8), font = 'Any 26', background_color='#1B2838'),
               sg.Input(size=(30)),
@@ -72,8 +82,8 @@ sixth_row = [[sg.Text('CMD', size=(8), font = 'Any 26', background_color='#1B283
 layout = [[top_banner],
           [second_row],
           [third_row],
-          [sg.Canvas(key='figCanvas')],  #this is the graph
-          [sg.Text('Graph')],
+          [fourth_row],  #this is the graph
+          [fifth_row],
           [sixth_row]]
 
 _VARS['window'] = sg.Window('test window', layout, margins=(0,0), location=(0,0), finalize=True)
@@ -89,14 +99,14 @@ def getData():
 
 
 
-def drawChart():
+def drawChart(graph):  # graph is the graph number set as an integer
     _VARS['pltFig'] = plt.figure()
     dataXY = (getData)()
     plt.plot(dataXY[0], dataXY[1], '-k')
     plt.plot(dataXY[0], dataXY[2], '-b')
     _VARS['pltFig'].set_size_inches(3,3)
     _VARS['fig_agg'] = draw_figure(
-        _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
+        _VARS['window']['figCanvas'+str(graph)].TKCanvas, _VARS['pltFig'])
 
 
 # Recreate Synthetic data, clear existing figre and redraw plot.
@@ -105,6 +115,7 @@ def drawChart():
 #use panda to trigger new update in csv file and send to graph to update??
 
 def updateChart():
+    #canvas = 'figCanvas' + str(graph)
     _VARS['fig_agg'].get_tk_widget().forget()
     dataXY = getData()
     # plt.cla()
@@ -115,8 +126,10 @@ def updateChart():
 
 # \\  -------- PYPLOT -------- //
 
-
-drawChart()
+i=0;
+while (i < 10):
+    drawChart(i)
+    i+= 1
 
 
 _VARS['window'].maximize()
