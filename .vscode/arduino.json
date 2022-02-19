@@ -1,0 +1,6 @@
+{
+    "configuration": "cpu=atmega328",
+    "board": "arduino:avr:nano",
+    "sketch": "Telemetry/container.ino",
+    "port": "/dev/tty.usbserial-AB0L9J69"
+}
