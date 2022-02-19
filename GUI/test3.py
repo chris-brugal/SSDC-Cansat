@@ -33,10 +33,10 @@ def init():                              #set first point
 def animate(i):                         #draws line
 
     data = pd.read_csv('Flight_1063_C.csv')
-    xArray = data['Count']
-    yArray = data['Altitude']
-    gyro = data['Gyro']
-    temp = data['Temp']
+    xArray = data['PACKET_COUNT']
+    yArray = data['ALTITUDE']
+    gyro = data['GPS_LONGITUDE']
+    temp = data['TEMP']
 
     win = 7                           #maximum window size
     imin = min(max(0, i - win), len(xArray) - win)      #gets current window range

@@ -10,7 +10,11 @@ PACKET_TYPE2 = 80
 
 file = open('Flight_'+TEAM_ID+'_'+chr(PACKET_TYPE)+'.csv', 'w', newline='')
 writer = csv.writer(file)
-writer.writerow(["Time", "Count", "Altitude", "Gyro", "Temp"])
+
+writer.writerow(["TEAM_ID","MISSION_TIME", "PACKET_COUNT","PACKET_TYPE","MODE", "TP_RELEASED", "ALTITUDE", 
+"TEMP", "VOLTAGE", "GPS_TIME", "GPS_LATITUDE", "GPS_LONGITUDE", "GPS_ALTITUDE", "GPS_SATS", 
+"SOFTWARE_STATE", "CMD_ECHO"])
+
 file.close()
 
 i = 0
@@ -29,7 +33,12 @@ while i < 1000:
         rand = random.randint(0,100)
         rand2 = random.randint(0,100)
         rand3 = random.randint(0,100)
-        writer.writerow([time.strftime("%H:%M:%S", time.localtime()),i ,rand, rand2, rand3])
+        rand4 = random.randint(0,100)
+        rand5 = random.randint(0,100)
+        rand6 = random.randint(0,100)
+        rand7 = random.randint(0,100)
+        writer.writerow([1063,time.strftime("%H:%M:%S", time.localtime()) ,i, 'C', 'F', 'R', rand, rand2, rand3, time.strftime("%H:%M:%S", time.localtime()),
+        rand4, rand5, rand6, rand7, 'Decent', 'CXON'])
         print (i)
 
     time.sleep(.01)
