@@ -29,7 +29,7 @@ _VARS = {'window': False,
          'pltsubFig2': False,
          'pltsubFig3': False,
          'pltsubFig4': False,
-         'pltsubFig5': False,
+         'pltsubFig5': False,           #Needed????
          'pltsubFig6': False,
          'pltsubFig7': False,
          'pltsubFig8': False,
@@ -53,7 +53,7 @@ PT1 = 'C'
 PT2 = 'P'
 SS1 = 'LAUNCH_AWAITING'
 SS2 = 'LAUNCH_AWAITING'
-PC1 = 0
+PC1 = 500
 PC2 = 1687
 MODE = 'S'
 TP_DEPLOY = 'F'
@@ -125,7 +125,7 @@ _VARS['window'] = sg.Window('test window', layout, margins=(0,0), location=(0,0)
 def getData():  # get data from canister csv file
     data = pd.read_csv('Flight_1063_C.csv')
     global PC1 
-    PC1 = data['PACKET_COUNT'][PC1+1]
+    PC1 +=1
     PCC = data['PACKET_COUNT']
     ID = data['TEAM_ID'][PC1]
     MODE = data['MODE'][PC1]
@@ -162,7 +162,7 @@ def setyAxis():      #only done once in drawchart function to set axies
     _VARS['pltAxis8'].set_title('Mag (gaus) vs Time(s)')
     _VARS['pltAxis9'].set_title('Pointing Error (deg) vs Time (s)')
 
-def drawChart(graph):  # graph is the graph number set as an integer
+def drawChart(graph):  # graph is the graph number set as an integer  THIS CREATES THE GRAPHS AND DRAWS THEM BLANK
     _VARS['pltFig'+str(graph)] = plt.figure()
     _VARS['pltsubFig'+str(graph)] = plt.subplot()
     _VARS['pltAxis'+str(graph)] = plt.subplot()
@@ -170,9 +170,6 @@ def drawChart(graph):  # graph is the graph number set as an integer
         setyAxis()
     _VARS['pltAxis'+str(graph)].set_xlabel('Time')
     _VARS['pltAxis'+str(graph)].margins(0.05)  
-
-    #plt.plot(dataXY[0], dataXY[1], '-k')
-    #plt.plot(dataXY[0], dataXY[2], '-b')
     _VARS['pltFig'+str(graph)].set_size_inches(3,3)
     _VARS['fig_agg'] = draw_figure(
         _VARS['window']['figCanvas'+str(graph)].TKCanvas, _VARS['pltFig'+str(graph)])
@@ -224,23 +221,42 @@ def animate(i):                       #draws line
 #create clock to keep track of frame in order to update graph??
 #use panda to trigger new update in csv file and send to graph to update??
 
-def updateChart(graph):
-    canvas = 'figCanvas' + str(graph)
+def updateChart():   #THIS TAKES ALL DATA AND GRAPHS IT
+    #canvas = 'figCanvas' + str(graph)
     dataXY = getData()
-    #plt.plot(dataXY[0], dataXY[1], '-k')
-    #plt.plot(dataXY[0], dataXY[2], '-b')
-    #anim = animation.FuncAnimation(_VARS['pltsubFig'+str(graph)], animate, init_func=init, interval=1000)  #THIS IS BREAKING 
+
+    win = 7                           #maximum window size
+    imin = min(max(0, PC1 - win), len(dataXY[0]) - win)      #gets current window range
+    xdata = dataXY[0][PC1-7:PC1]          #gets x values between range
+    ydata = dataXY[1][PC1-7:PC1]          #gets y values between range
+    zdata = dataXY[2][PC1-7:PC1]
+
+    x = 0
+    while (x < 10):
+        _VARS['pltsubFig'+str(x)].plot(xdata, ydata, '-k')
+        _VARS['pltsubFig'+str(x)].plot(xdata, zdata, '-b')
+        x+=1
+    i = 0
+    while (i < 10):
+        _VARS['pltAxis'+str(i)].relim()                       #renumbers x axis
+        _VARS['pltAxis'+str(i)].autoscale()
+        i+=1
 
 # \\  -------- PYPLOT -------- //
 
 
 _VARS['window'].maximize()
 
-updateChart(0)
+x = 0
+while (x < 10):
+    updateChart()
+    x+=1
+
 while True:
     event, values = _VARS['window'].read(timeout=10)
     _VARS['window']['time'].update(clock())
     _VARS['window']['gpsTime'].update('GPS Time: ' + clock())
+
     if event in (None, 'Close'):
         break
 
