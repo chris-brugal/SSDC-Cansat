@@ -37,7 +37,7 @@ while i < 1000:
         rand5 = random.randint(0,100)
         rand6 = random.randint(0,100)
         rand7 = random.randint(0,100)
-        writer.writerow([1063,time.strftime("%H:%M:%S", time.localtime()) ,i, 'C', 'F', 'R', rand, rand2, rand3, time.strftime("%H:%M:%S", time.localtime()),
+        writer.writerow([1063,time.strftime("%H:%M:%S", time.localtime()) ,i/2, 'C', 'F', 'R', rand, rand2, rand3, time.strftime("%H:%M:%S", time.localtime()),
         rand4, rand5, rand6, rand7, 'Decent', 'CXON'])
         print (i)
 

@@ -53,7 +53,7 @@ PT1 = 'C'
 PT2 = 'P'
 SS1 = 'LAUNCH_AWAITING'
 SS2 = 'LAUNCH_AWAITING'
-PC1 = 500
+PC1 = 0
 PC2 = 1687
 MODE = 'S'
 TP_DEPLOY = 'F'
@@ -222,19 +222,24 @@ def animate(i):                       #draws line
 #use panda to trigger new update in csv file and send to graph to update??
 
 def updateChart():   #THIS TAKES ALL DATA AND GRAPHS IT
-    #canvas = 'figCanvas' + str(graph)
-    dataXY = getData()
+    #///////////////////////////////////////////////////////////////////////////////////////////////////////////
+    #use t+ mission time instead of packet count since payload and canister are transmitting at different rates
+    #so their graphs will will be moving faster/slower than the other????
+    #///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    data = getData()
 
     win = 7                           #maximum window size
-    imin = min(max(0, PC1 - win), len(dataXY[0]) - win)      #gets current window range
-    xdata = dataXY[0][PC1-7:PC1]          #gets x values between range
-    ydata = dataXY[1][PC1-7:PC1]          #gets y values between range
-    zdata = dataXY[2][PC1-7:PC1]
+    imin = min(max(0, PC1 - win), len(data[0]) - win)      #gets current window range
+    #this needs to get the data where pc1-7 to pc is located
+    pc = data[0][PC1-7:PC1]          #gets x values between range  THIS IS GETTING THE DATA AT PC1-7 to PC1 NOT THE ACTUAL VALUES
+    alt = data[1][PC1-7:PC1]          #gets y values between range
+    temp = data[2][PC1-7:PC1]
 
     x = 0
     while (x < 10):
-        _VARS['pltsubFig'+str(x)].plot(xdata, ydata, '-k')
-        _VARS['pltsubFig'+str(x)].plot(xdata, zdata, '-b')
+        _VARS['pltsubFig'+str(x)].plot(pc, alt, '-k')
+        _VARS['pltsubFig'+str(x)].plot(pc, temp, '-b')
         x+=1
     i = 0
     while (i < 10):
@@ -247,10 +252,7 @@ def updateChart():   #THIS TAKES ALL DATA AND GRAPHS IT
 
 _VARS['window'].maximize()
 
-x = 0
-while (x < 10):
-    updateChart()
-    x+=1
+updateChart()
 
 while True:
     event, values = _VARS['window'].read(timeout=10)
