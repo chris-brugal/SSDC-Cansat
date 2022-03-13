@@ -17,9 +17,9 @@ axis.set_xlabel('Time')
 axis.set_ylabel('Altitude')
 axis.margins(0.05)                  #makes it more fluid
 
-plotlays, plotcols = [1], ["blue","red", "brown"]
+plotlays, plotcols = [2], ["blue","red", "brown"]
 lines = []
-for index in range(1):
+for index in range(2):
     lobj = axis.plot([],[],lw=2,color=plotcols[index])[0]
     lines.append(lobj)
 
@@ -45,7 +45,7 @@ def animate(i):                         #draws line
     gyroData = gyro[imin:i]
     tempData = temp[imin:i]
     lines[0].set_data(xdata, ydata)     #sets line
-    #lines[1].set_data(xdata, gyroData)
+    lines[1].set_data(xdata, gyroData)
     #lines[2].set_data(xdata, tempData)
     axis.relim()                       #renumbers x axis
     axis.autoscale()   
