@@ -53,7 +53,8 @@ PT1 = 'C'
 PT2 = 'P'
 SS1 = 'LAUNCH_AWAITING'
 SS2 = 'LAUNCH_AWAITING'
-PC1 = 500
+global PC1 
+PC1 = 0
 PC2 = 1687
 MODE = 'S'
 TP_DEPLOY = 'F'
@@ -125,11 +126,13 @@ _VARS['window'] = sg.Window('test window', layout, margins=(0,0), location=(0,0)
 def getData():  # get data from canister csv file
     data = pd.read_csv('Flight_1063_C.csv')
     global PC1 
-    PC1 +=1
+    PC1 = data['PACKET_COUNT'][PC1 + 1]
+    print(PC1)
     PCC = data['PACKET_COUNT']
     ID = data['TEAM_ID'][PC1]
     MODE = data['MODE'][PC1]
     TP_DEPLOY = data['TP_RELEASED'][PC1]
+    tPlus = data['T+ Time']
     alt = data['ALTITUDE']
     temp = data['TEMP']
     volt = data['VOLTAGE']
@@ -137,7 +140,7 @@ def getData():  # get data from canister csv file
     gpsLONG = data['GPS_LONGITUDE']
     gpsALT = data['GPS_ALTITUDE']
     SS1 = data['SOFTWARE_STATE'][PC1]
-    return (PCC, alt, temp, volt, gpsLAT, gpsLONG, gpsALT)
+    return (PCC, alt, temp, volt, gpsLAT, gpsLONG, gpsALT, tPlus)
 
 def setyAxis():      #only done once in drawchart function to set axies
     _VARS['pltAxis0'].set_ylabel('Altitude')
@@ -214,6 +217,12 @@ def animate(i):                       #draws line
                     #renumbers x axis
     return lines,
 
+x = 0
+while (x < 10):
+    anim = animation.FuncAnimation(_VARS['pltFig'+str(x)], animate, init_func=init, interval=1000)  #nees to be updated
+    x+=1
+
+plt.show()    #needs to be updated
 
 
 # Recreate Synthetic data, clear existing figre and redraw plot.
@@ -221,7 +230,7 @@ def animate(i):                       #draws line
 #create clock to keep track of frame in order to update graph??
 #use panda to trigger new update in csv file and send to graph to update??
 
-def updateChart():   #THIS TAKES ALL DATA AND GRAPHS IT
+def updateChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
     #///////////////////////////////////////////////////////////////////////////////////////////////////////////
     #use t+ mission time instead of packet count since payload and canister are transmitting at different rates
     #so their graphs will will be moving faster/slower than the other????
@@ -230,11 +239,11 @@ def updateChart():   #THIS TAKES ALL DATA AND GRAPHS IT
     data = getData()
 
     win = 7                           #maximum window size
-    imin = min(max(0, PC1 - win), len(data[0]) - win)      #gets current window range
+    imin = min(max(0, 10 - win), len(data[0]) - win)      #gets current window range
     #this needs to get the data where pc1-7 to pc is located
-    pc = data[0][PC1-7:PC1]          #gets x values between range  THIS IS GETTING THE DATA AT PC1-7 to PC1 NOT THE ACTUAL VALUES
-    alt = data[1][PC1-7:PC1]          #gets y values between range
-    temp = data[2][PC1-7:PC1]
+    pc = data[0][end-start]          #gets x values between range  THIS IS GETTING THE DATA AT PC1-7 to PC1 NOT THE ACTUAL VALUES
+    alt = data[1][end-start]          #gets y values between range
+    temp = data[2][end-start]
 
     x = 0
     while (x < 10):
@@ -252,12 +261,13 @@ def updateChart():   #THIS TAKES ALL DATA AND GRAPHS IT
 
 _VARS['window'].maximize()
 
-updateChart()
+#updateChart(100,93)
 
 while True:
     event, values = _VARS['window'].read(timeout=10)
     _VARS['window']['time'].update(clock())
     _VARS['window']['gpsTime'].update('GPS Time: ' + clock())
+
 
     if event in (None, 'Close'):
         break
