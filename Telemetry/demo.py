@@ -59,4 +59,4 @@ while i < 600:
             rand4, rand5, rand6, rand7, rand2, rand, rand4, 'Decent'])
             print (i)
 
-    time.sleep(.1)
+    time.sleep(1)
