@@ -5,6 +5,7 @@ import time
 import random
 import pandas as pd
 from datetime import datetime, timedelta
+import math
 
 TEAM_ID = "1063" #this is the final and correct team id
 PAYLOAD_ID = "5063"  #payload id should be team id + 5000
@@ -50,10 +51,11 @@ while i < 600:
             rand7 = random.randint(0,100)
             if (i == 1):
                 startTime = datetime.now()
-            writer.writerow([TEAM_ID,datetime.now().strftime("%H:%M:%S") , str(datetime.now()-startTime) ,i, 'C', 'F', 'R', rand, rand2, rand3, time.strftime("%H:%M:%S", time.localtime()),
+            writer.writerow([TEAM_ID,datetime.now().strftime("%H:%M:%S") , str(math.floor((datetime.now()-startTime).total_seconds())) ,i, 'C', 'F', 'R', rand, rand2, rand3, time.strftime("%H:%M:%S", time.localtime()),
             rand4, rand5, rand6, rand7, 'Decent', 'CXON'])
 
-            writer2.writerow([PAYLOAD_ID,datetime.now().strftime("%H:%M:%S") , str(datetime.now()-startTime) ,i, 'C', rand7, rand5, rand, rand2, rand3, rand5,
+
+            writer2.writerow([PAYLOAD_ID,datetime.now().strftime("%H:%M:%S") ,  str(math.floor((datetime.now()-startTime).total_seconds())) ,i, 'C', rand7, rand5, rand, rand2, rand3, rand5,
             rand4, rand5, rand6, rand7, rand2, rand, rand4, 'Decent'])
             print (i)
 

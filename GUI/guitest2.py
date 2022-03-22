@@ -251,10 +251,6 @@ def animate(i):                       #draws line
 #use panda to trigger new update in csv file and send to graph to update??
 
 def updateCanChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
-    #///////////////////////////////////////////////////////////////////////////////////////////////////////////
-    #use t+ mission time instead of packet count since payload and canister are transmitting at different rates
-    #so their graphs will will be moving faster/slower than the other????
-    #///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     canData = getCanData()
     canTPlus = canData[0][start:end]          #gets x values between range  THIS IS GETTING THE DATA AT PC1-7 to PC1 NOT THE ACTUAL VALUES
@@ -331,9 +327,6 @@ _VARS['window'].maximize()
 
 updateCanChart(0,7)
 updatePayloadChart(0,7)
-time.sleep(1)
-updateCanChart(1,8)
-updatePayloadChart(1,8)
 
 while True:
     event, values = _VARS['window'].read(timeout=10)
