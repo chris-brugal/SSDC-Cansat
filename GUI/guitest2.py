@@ -166,12 +166,14 @@ def getCanData():  # get data from canister csv file
     return (tPlus, alt, temp, volt, gpsLAT, gpsLONG, gpsALT)
 
 def getPayloadData():
+        data = pd.read_csv('Flight_5063_P.csv')
+
         global PC2
         global PT2
         global SS2
 
-        data = pd.read_csv('Flight_5063_P.csv')
-        PC2 = data['PACKET_COUNT'][PC2+1]
+        PC2 = data['PACKET_COUNT'][PC2]
+
         tPlusP = data['T+ Time']
         altP = data['TP_ALTITUDE']
         tempP = data['TP_TEMP']
@@ -187,9 +189,8 @@ def getPayloadData():
         magY = data['MAG_Y']
         pe = data['POINTING_ERROR']
 
-        SS2 = data['TP_SOFTWARE_STATE'][PC2]
-        #PC2 = data['PACKET_COUNT'][PC2]
-        PT2 = data['PACKET_TYPE'][PC2]
+        SS2 = data['TP_SOFTWARE_STATE'][PC2-1]
+        PT2 = data['PACKET_TYPE'][PC2-1]
 
         _VARS['window']['PC2'].update('Packet Count 2: ' + str(PC2))
         _VARS['window']['SS2'].update('Software State 2: ' + SS2)
@@ -310,11 +311,7 @@ def updateCanChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
 
     _VARS['pltsubFig7'].plot(canTPlus, gpsAlt, '-k')
 
-    i = 0
-    while (i < 10):
-        _VARS['pltAxis'+str(i)].relim()                       #renumbers x axis
-        _VARS['pltAxis'+str(i)].autoscale()
-        i+=1
+    
 
 def updatePayloadChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
 
@@ -354,6 +351,12 @@ def updatePayloadChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
     _VARS['pltsubFig8'].plot(payTPlus, magY, brown)
 
     _VARS['pltAxis9'].plot(payTPlus, pe, '-r')
+
+    i = 0
+    while (i < 10):
+        _VARS['pltAxis'+str(i)].relim()                       #renumbers x axis
+        _VARS['pltAxis'+str(i)].autoscale()
+        i+=1
 
 
 # \\  -------- PYPLOT -------- //
