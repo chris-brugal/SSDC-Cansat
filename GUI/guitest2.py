@@ -10,6 +10,8 @@ import pandas as pd
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 
+from pylab import *
+
 
 brown = '#854803'
 orange ='#f29411'
@@ -62,6 +64,8 @@ MODE = 'S'
 TP_DEPLOY = 'F'
 CMD_ECHO = 'OFF'
 GPS_SAT = 0
+
+#ion() #turns interative mode on
 
 def draw_figure(canvas, figure):
     figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
@@ -350,13 +354,9 @@ def updatePayloadChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
     _VARS['pltsubFig8'].plot(payTPlus, magP, '-m')
     _VARS['pltsubFig8'].plot(payTPlus, magY, brown)
 
-    _VARS['pltAxis9'].plot(payTPlus, pe, '-r')
+    _VARS['pltsubFig9'].plot(payTPlus, pe, '-r')
 
-    i = 0
-    while (i < 10):
-        _VARS['pltAxis'+str(i)].relim()                       #renumbers x axis
-        _VARS['pltAxis'+str(i)].autoscale()
-        i+=1
+    
 
 
 # \\  -------- PYPLOT -------- //
@@ -377,7 +377,7 @@ while True:
     time.sleep(1)
     print ("DONE")
     updateCanChart(i,i+7)
-    updatePayloadChart(i,i*4)
+    updatePayloadChart(i,4*(i+7))
     i+=1
 
     if event in (None, 'Close'):
