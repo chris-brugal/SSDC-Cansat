@@ -57,6 +57,15 @@ while i < 600:
 
             writer2.writerow([PAYLOAD_ID,datetime.now().strftime("%H:%M:%S") ,  str(math.floor((datetime.now()-startTime).total_seconds())) ,i, 'C', rand7, rand5, rand, rand2, rand3, rand5,
             rand4, rand5, rand6, rand7, rand2, rand, rand4, 'Decent'])
+
+            writer2.writerow([PAYLOAD_ID,datetime.now().strftime("%H:%M:%S") ,  str(math.floor((datetime.now()-startTime).total_seconds())+0.25) ,i, 'C', rand7, rand5, rand, rand2, rand3, rand5,
+            rand4, rand5, rand6, rand7, rand2, rand, rand4, 'Decent'])
+
+            writer2.writerow([PAYLOAD_ID,datetime.now().strftime("%H:%M:%S") ,  str(math.floor((datetime.now()-startTime).total_seconds())+0.5) ,i, 'C', rand7, rand5, rand, rand2, rand3, rand5,
+            rand4, rand5, rand6, rand7, rand2, rand, rand4, 'Decent'])
+
+            writer2.writerow([PAYLOAD_ID,datetime.now().strftime("%H:%M:%S") ,  str(math.floor((datetime.now()-startTime).total_seconds())+0.75) ,i, 'C', rand7, rand5, rand, rand2, rand3, rand5,
+            rand4, rand5, rand6, rand7, rand2, rand, rand4, 'Decent'])
             print (i)
 
     time.sleep(1)
