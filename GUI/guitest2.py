@@ -17,7 +17,17 @@ brown = '#854803'
 orange ='#f29411'
 
 _VARS = {'window': False,
-         'fig_agg': False,
+         'fig_agg0': False,
+         'fig_agg1': False,
+         'fig_agg2': False,
+         'fig_agg3': False,
+         'fig_agg4': False,
+         'fig_agg5': False,
+         'fig_agg6': False,
+         'fig_agg7': False,
+         'fig_agg8': False,
+         'fig_agg9': False,
+
          'pltFig0': False,
          'pltFig1': False,
          'pltFig2': False,
@@ -226,64 +236,32 @@ def setyAxis():      #only done once in drawchart function to set axies
     _VARS['pltAxis8'].set_title('Mag (gaus) vs Time(s)')
     _VARS['pltAxis9'].set_title('Pointing Error (deg) vs Time (s)')
 
+    _VARS['pltAxis0'].set_xlabel('Time')
+    _VARS['pltAxis1'].set_xlabel('Time')
+    _VARS['pltAxis2'].set_xlabel('Time')
+    _VARS['pltAxis3'].set_xlabel('Time')
+    _VARS['pltAxis4'].set_xlabel('Time')
+    _VARS['pltAxis5'].set_xlabel('Time')
+    _VARS['pltAxis6'].set_xlabel('Time')
+    _VARS['pltAxis7'].set_xlabel('Time')
+    _VARS['pltAxis8'].set_xlabel('Time')
+    _VARS['pltAxis9'].set_xlabel('Time')
+
 def drawChart(graph):  # graph is the graph number set as an integer  THIS CREATES THE GRAPHS AND DRAWS THEM BLANK
     _VARS['pltFig'+str(graph)] = plt.figure()
     _VARS['pltsubFig'+str(graph)] = plt.subplot()
     _VARS['pltAxis'+str(graph)] = plt.subplot()
     if (graph == 9):
         setyAxis()
-    _VARS['pltAxis'+str(graph)].set_xlabel('Time')
     _VARS['pltAxis'+str(graph)].margins(0.05)  
     _VARS['pltFig'+str(graph)].set_size_inches(3,3)
-    _VARS['fig_agg'] = draw_figure(
+    _VARS['fig_agg'+str(graph)] = draw_figure(
         _VARS['window']['figCanvas'+str(graph)].TKCanvas, _VARS['pltFig'+str(graph)])
 
 i=0
 while (i < 10):
     drawChart(i)
     i+= 1
-
-plotlays, plotcols = [1], ["blue","red", "brown"]
-
-i = 0
-lines = []
-while (i < 1):
-    for index in range(1):
-       lobj = _VARS['pltAxis'+str(i)].plot([],[],lw=2,color=plotcols[index])[0]
-       lines.append(lobj)
-    i+=1
-
-
-def init():                              #set first point
-    for line in lines:
-        line.set_data([],[])
-    return lines
-
-def animate(i):                       #draws line
-
-    canData = (getCanData)()
-    win = 7                           #maximum window size
-    imin = min(max(0, i - win), len(canData[0]) - win)      #gets current window range
-    xdata = canData[0][imin:i]          #gets x values between range
-    ydata = canData[1][imin:i]          #gets y values between range
-    gyroData = canData[2][imin:i]
-    tempData = canData[3][imin:i]
-    lines[0].set_data(xdata, ydata)     #sets line
-    #lines[1].set_data(xdata, gyroData)
-    #lines[2].set_data(xdata, tempData)
-    i = 0
-    while (i < 10):
-        _VARS['pltAxis'+str(i)].relim()                       #renumbers x axis
-        _VARS['pltAxis'+str(i)].autoscale()   
-                    #renumbers x axis
-    return lines,
-
-#x = 0
-#while (x < 10):
-#    anim = animation.FuncAnimation(_VARS['pltFig'+str(x)], animate, init_func=init, interval=1000)  #nees to be updated
-#    x+=1
-
-#plt.show()    #needs to be updated
 
 
 # Recreate Synthetic data, clear existing figre and redraw plot.
@@ -302,6 +280,12 @@ def updateCanChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
     gpsLong = canData[5][start:end]
     gpsAlt = canData[6][start:end]
 
+    _VARS['pltsubFig0'].cla()
+    _VARS['pltsubFig1'].cla()
+    _VARS['pltsubFig2'].cla()
+    _VARS['pltsubFig5'].cla()
+    _VARS['pltsubFig6'].cla()
+    _VARS['pltsubFig7'].cla()
 
     _VARS['pltsubFig0'].plot(canTPlus, canAlt, '-k')
 
@@ -315,11 +299,19 @@ def updateCanChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
 
     _VARS['pltsubFig7'].plot(canTPlus, gpsAlt, '-k')
 
+    _VARS['fig_agg0'].draw()
+    _VARS['fig_agg1'].draw()
+    _VARS['fig_agg2'].draw()
+    _VARS['fig_agg5'].draw()
+    _VARS['fig_agg6'].draw()
+    _VARS['fig_agg7'].draw()
+
     
 
 def updatePayloadChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
 
     payloadData = getPayloadData()
+    canData = getCanData()
 
     payTPlus = payloadData[0][start:end]
     payAlt = payloadData[1][start:end]
@@ -335,6 +327,14 @@ def updatePayloadChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
     magP = payloadData[11][start:end] 
     magY = payloadData[12][start:end] 
     pe = payloadData[13][start:end] 
+
+    _VARS['pltsubFig0'].cla()
+    _VARS['pltsubFig1'].cla()
+    _VARS['pltsubFig2'].cla()
+    _VARS['pltsubFig3'].cla()
+    _VARS['pltsubFig4'].cla()
+    _VARS['pltsubFig8'].cla()
+    _VARS['pltsubFig9'].cla()
 
     _VARS['pltsubFig0'].plot(payTPlus, payAlt, '-r')
 
@@ -356,6 +356,16 @@ def updatePayloadChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
 
     _VARS['pltsubFig9'].plot(payTPlus, pe, '-r')
 
+    setyAxis()
+
+    _VARS['fig_agg0'].draw()
+    _VARS['fig_agg1'].draw()
+    _VARS['fig_agg2'].draw()
+    _VARS['fig_agg3'].draw()
+    _VARS['fig_agg4'].draw()
+    _VARS['fig_agg8'].draw()
+    _VARS['fig_agg9'].draw()
+
     
 
 
@@ -371,16 +381,19 @@ i=0
 
 while True:
     event, values = _VARS['window'].read(timeout=10)
-    _VARS['window']['time'].update(clock())
-    _VARS['window']['gpsTime'].update('GPS Time: ' + clock())
-
-    time.sleep(1)
-    print ("DONE")
-    updateCanChart(i,i+7)
-    updatePayloadChart(i,4*(i+7))
-    i+=1
-
     if event in (None, 'Close'):
         break
 
+    _VARS['window']['time'].update(clock())
+    _VARS['window']['gpsTime'].update('GPS Time: ' + clock())
+
+    time.sleep(.5)
+    updateCanChart(i,i+7)
+    updatePayloadChart(4*i,4*(i+7))
+    i+=1
+
+    
+
 _VARS['window'].close()
+
+#https://github.com/PySimpleGUI/PySimpleGUI/tree/master/DemoPrograms
