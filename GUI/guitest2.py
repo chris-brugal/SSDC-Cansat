@@ -254,7 +254,7 @@ def drawChart(graph):  # graph is the graph number set as an integer  THIS CREAT
     if (graph == 9):
         setyAxis()
     _VARS['pltAxis'+str(graph)].margins(0.05)  
-    _VARS['pltFig'+str(graph)].set_size_inches(3,3)
+    _VARS['pltFig'+str(graph)].set_size_inches(3.5,3.5)
     _VARS['fig_agg'+str(graph)] = draw_figure(
         _VARS['window']['figCanvas'+str(graph)].TKCanvas, _VARS['pltFig'+str(graph)])
 
@@ -280,13 +280,6 @@ def updateCanChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
     gpsLong = canData[5][start:end]
     gpsAlt = canData[6][start:end]
 
-    _VARS['pltsubFig0'].cla()
-    _VARS['pltsubFig1'].cla()
-    _VARS['pltsubFig2'].cla()
-    _VARS['pltsubFig5'].cla()
-    _VARS['pltsubFig6'].cla()
-    _VARS['pltsubFig7'].cla()
-
     _VARS['pltsubFig0'].plot(canTPlus, canAlt, '-k')
 
     _VARS['pltsubFig1'].plot(canTPlus, canTemp, '-k')
@@ -299,19 +292,22 @@ def updateCanChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
 
     _VARS['pltsubFig7'].plot(canTPlus, gpsAlt, '-k')
 
-    _VARS['fig_agg0'].draw()
-    _VARS['fig_agg1'].draw()
-    _VARS['fig_agg2'].draw()
-    _VARS['fig_agg5'].draw()
-    _VARS['fig_agg6'].draw()
-    _VARS['fig_agg7'].draw()
+    #_VARS['fig_agg0'].draw()
+    #_VARS['fig_agg1'].draw()
+    #_VARS['fig_agg2'].draw()
+    #_VARS['fig_agg5'].draw()
+    #_VARS['fig_agg6'].draw()
+    #_VARS['fig_agg7'].draw()
 
     
 
-def updatePayloadChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
+def updatePayloadChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
+    start  = start0*4
+    end = (start0+7)*4
+
+    
 
     payloadData = getPayloadData()
-    canData = getCanData()
 
     payTPlus = payloadData[0][start:end]
     payAlt = payloadData[1][start:end]
@@ -333,8 +329,13 @@ def updatePayloadChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
     _VARS['pltsubFig2'].cla()
     _VARS['pltsubFig3'].cla()
     _VARS['pltsubFig4'].cla()
+    _VARS['pltsubFig5'].cla()
+    _VARS['pltsubFig6'].cla()
+    _VARS['pltsubFig7'].cla()
     _VARS['pltsubFig8'].cla()
     _VARS['pltsubFig9'].cla()
+
+    updateCanChart(start0, start0+7)
 
     _VARS['pltsubFig0'].plot(payTPlus, payAlt, '-r')
 
@@ -363,6 +364,9 @@ def updatePayloadChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
     _VARS['fig_agg2'].draw()
     _VARS['fig_agg3'].draw()
     _VARS['fig_agg4'].draw()
+    _VARS['fig_agg5'].draw()
+    _VARS['fig_agg6'].draw()
+    _VARS['fig_agg7'].draw()
     _VARS['fig_agg8'].draw()
     _VARS['fig_agg9'].draw()
 
@@ -375,8 +379,8 @@ def updatePayloadChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
 _VARS['window'].maximize()
 
 
-updateCanChart(0,7)
-updatePayloadChart(0,28)
+#updateCanChart(0,7)
+updatePayloadChart(0)
 i=0
 
 while True:
@@ -388,8 +392,8 @@ while True:
     _VARS['window']['gpsTime'].update('GPS Time: ' + clock())
 
     time.sleep(.5)
-    updateCanChart(i,i+7)
-    updatePayloadChart(4*i,4*(i+7))
+    #updateCanChart(i,i+7)
+    updatePayloadChart(i)
     i+=1
 
     
