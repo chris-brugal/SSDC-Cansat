@@ -9,6 +9,7 @@ import matplotlib as mpl
 import pandas as pd
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
+import math
 
 from pylab import *
 
@@ -302,10 +303,8 @@ def updateCanChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
     
 
 def updatePayloadChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
-    start  = start0*4
-    end = (start0+7)*4
-
-    
+    start  = start0
+    end = (start0+27)
 
     payloadData = getPayloadData()
 
@@ -335,7 +334,8 @@ def updatePayloadChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
     _VARS['pltsubFig8'].cla()
     _VARS['pltsubFig9'].cla()
 
-    updateCanChart(start0, start0+7)
+
+    updateCanChart(math.floor(start0/4), math.floor(start0/4)+7)
 
     _VARS['pltsubFig0'].plot(payTPlus, payAlt, '-r')
 
@@ -370,8 +370,6 @@ def updatePayloadChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
     _VARS['fig_agg8'].draw()
     _VARS['fig_agg9'].draw()
 
-    
-
 
 # \\  -------- PYPLOT -------- //
 
@@ -391,12 +389,10 @@ while True:
     _VARS['window']['time'].update(clock())
     _VARS['window']['gpsTime'].update('GPS Time: ' + clock())
 
-    time.sleep(.5)
+    time.sleep(.02)
     #updateCanChart(i,i+7)
     updatePayloadChart(i)
     i+=1
-
-    
 
 _VARS['window'].close()
 
