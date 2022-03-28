@@ -141,7 +141,7 @@ _VARS['window'] = sg.Window('test window', layout, margins=(0,0), location=(0,0)
 # <TEMP>, <VOLTAGE>, < GPS_TIME>, <GPS_LATITUDE>, <GPS_LONGITUDE>, <GPS_ALTITUDE>, <GPS_SATS>, 
 # <SOFTWARE_STATE>, <CMD_ECHO>
 
-def getCanData():  # get data from canister csv file
+def getCanData(point):  # get data from canister csv file
     data = pd.read_csv('Flight_1063_C.csv')
     global PC1
     global MODE
@@ -152,7 +152,8 @@ def getCanData():  # get data from canister csv file
     global PT1
     global GPS_SAT
 
-    PC1 = data['PACKET_COUNT'][PC1]
+    if (point%4 == 1 or point == 0):
+        PC1 = data['PACKET_COUNT'][PC1]
 
     tPlus = data['T+ Time']
     alt = data['ALTITUDE']
@@ -270,9 +271,12 @@ while (i < 10):
 #create clock to keep track of frame in order to update graph??
 #use panda to trigger new update in csv file and send to graph to update??
 
-def updateCanChart(start, end):   #THIS TAKES ALL DATA AND GRAPHS IT
+def updateCanChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
 
-    canData = getCanData()
+    start = math.floor(start0/4)
+    end = math.floor(start0/4)+7
+
+    canData = getCanData(start0)
     canTPlus = canData[0][start:end]          #gets x values between range  THIS IS GETTING THE DATA AT PC1-7 to PC1 NOT THE ACTUAL VALUES
     canAlt = canData[1][start:end]          #gets y values between range
     canTemp = canData[2][start:end]
@@ -335,7 +339,7 @@ def updatePayloadChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
     _VARS['pltsubFig9'].cla()
 
 
-    updateCanChart(math.floor(start0/4), math.floor(start0/4)+7)
+    updateCanChart(start0)
 
     _VARS['pltsubFig0'].plot(payTPlus, payAlt, '-r')
 
