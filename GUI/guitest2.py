@@ -401,3 +401,6 @@ while True:
 _VARS['window'].close()
 
 #https://github.com/PySimpleGUI/PySimpleGUI/tree/master/DemoPrograms
+
+#Using pandas to only read a chunk of the data that we need::
+#https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#iterating-through-files-chunk-by-chunk
