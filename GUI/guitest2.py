@@ -69,8 +69,8 @@ PT1 = 'C'
 PT2 = 'P'
 SS1 = 'LAUNCH_AWAITING'
 SS2 = 'LAUNCH_AWAITING'
-PC1 = 0
-PC2 = 0
+PC1 = 1
+PC2 = 1
 MODE = 'S'
 TP_DEPLOY = 'F'
 CMD_ECHO = 'OFF'
@@ -142,7 +142,6 @@ _VARS['window'] = sg.Window('test window', layout, margins=(0,0), location=(0,0)
 # <SOFTWARE_STATE>, <CMD_ECHO>
 
 def getCanData(point):  # get data from canister csv file
-    data = pd.read_csv('Flight_1063_C.csv')
     global PC1
     global MODE
     global TP_DEPLOY
@@ -152,17 +151,29 @@ def getCanData(point):  # get data from canister csv file
     global PT1
     global GPS_SAT
 
-    if (point%4 == 1 or point == 0):
-        PC1 = data['PACKET_COUNT'][PC1]
+    if (PC1 > 7):
+        data = pd.read_csv('Flight_1063_C.csv', header=None, names=["TEAM_ID", "MISSION_TIME", "T+ TIME", "PACKET_COUNT", 
+        "PACKET_TYPE", "MODE", "TP_RELEASED", "ALTITUDE", "TEMP", "VOLTAGE", "GPS_TIME", "GPS_LATITUDE", "GPS_LONGITUDE", 
+        "GPS_ALTITUDE", "GPS_SATS", "SOFTWARE_STATE", "CMD_ECHO"], skiprows=PC1-8)
+    
+    else:
+        data = pd.read_csv('Flight_1063_C.csv', header=None, names=["TEAM_ID", "MISSION_TIME", "T+ TIME", "PACKET_COUNT", 
+        "PACKET_TYPE", "MODE", "TP_RELEASED", "ALTITUDE", "TEMP", "VOLTAGE", "GPS_TIME", "GPS_LATITUDE", "GPS_LONGITUDE", 
+        "GPS_ALTITUDE", "GPS_SATS", "SOFTWARE_STATE", "CMD_ECHO"], skiprows=1)
+    
 
-    tPlus = data['T+ Time']
+    if (point%4 == 1 or point == 0):
+       #PC1 = data['PACKET_COUNT'][8]
+        PC1+=1
+
+    tPlus = data['T+ TIME']
     alt = data['ALTITUDE']
     temp = data['TEMP']
     volt = data['VOLTAGE']
     gpsLAT = data['GPS_LATITUDE']
     gpsLONG = data['GPS_LONGITUDE']
     gpsALT = data['GPS_ALTITUDE']
-
+    print(PC1)
     GPS_SAT = data['GPS_SATS'][PC1-1]
     ID = data['TEAM_ID'][PC1-1]
     MODE = data['MODE'][PC1-1]
