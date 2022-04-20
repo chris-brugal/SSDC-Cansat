@@ -11,11 +11,10 @@ import pandas as pd
 fileLength = 0
 
 while True:
-    data = pd.read_csv('liveDemo.csv')
+    data = pd.read_csv('liveDemo.csv', usecols = ["PACKET_COUNT"])
     if (len(data) >  fileLength):
         fileLength = len(data)
         Packetcount = data['PACKET_COUNT'][fileLength-1]
-        #print (data)
         print (Packetcount)
     
     time.sleep(.5)
