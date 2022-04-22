@@ -62,21 +62,19 @@ _VARS = {'window': False,
          'pltAxis8': False,
          'pltAxis9': False}
 
-# Helper Functions
 
 ID = 1063
 PT1 = 'C'
 PT2 = 'P'
 SS1 = 'LAUNCH_AWAITING'
 SS2 = 'LAUNCH_AWAITING'
-PC1 = 1
-PC2 = 1
+PC1 = 0
+PC2 = 0
 MODE = 'S'
 TP_DEPLOY = 'F'
 CMD_ECHO = 'OFF'
 GPS_SAT = 0
 
-#ion() #turns interative mode on
 
 def draw_figure(canvas, figure):
     figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
@@ -141,7 +139,8 @@ _VARS['window'] = sg.Window('test window', layout, margins=(0,0), location=(0,0)
 # <TEMP>, <VOLTAGE>, < GPS_TIME>, <GPS_LATITUDE>, <GPS_LONGITUDE>, <GPS_ALTITUDE>, <GPS_SATS>, 
 # <SOFTWARE_STATE>, <CMD_ECHO>
 
-def getCanData(point):  # get data from canister csv file
+def getCanData():  # get data from canister csv file
+
     global PC1
     global MODE
     global TP_DEPLOY
@@ -152,35 +151,32 @@ def getCanData(point):  # get data from canister csv file
     global GPS_SAT
 
     if (PC1 > 7):
-        data = pd.read_csv('Flight_1063_C.csv', header=None, names=["TEAM_ID", "MISSION_TIME", "T+ TIME", "PACKET_COUNT", 
+            data = pd.read_csv('liveDemo.csv', header=None, names=["TEAM_ID", "MISSION_TIME", "T+ Time", "PACKET_COUNT", 
         "PACKET_TYPE", "MODE", "TP_RELEASED", "ALTITUDE", "TEMP", "VOLTAGE", "GPS_TIME", "GPS_LATITUDE", "GPS_LONGITUDE", 
-        "GPS_ALTITUDE", "GPS_SATS", "SOFTWARE_STATE", "CMD_ECHO"], skiprows=PC1-8)
-    
+        "GPS_ALTITUDE", "GPS_SATS", "SOFTWARE_STATE", "CMD_ECHO"], skiprows = PC1-6)
     else:
-        data = pd.read_csv('Flight_1063_C.csv', header=None, names=["TEAM_ID", "MISSION_TIME", "T+ TIME", "PACKET_COUNT", 
-        "PACKET_TYPE", "MODE", "TP_RELEASED", "ALTITUDE", "TEMP", "VOLTAGE", "GPS_TIME", "GPS_LATITUDE", "GPS_LONGITUDE", 
-        "GPS_ALTITUDE", "GPS_SATS", "SOFTWARE_STATE", "CMD_ECHO"], skiprows=1)
+        data = pd.read_csv('liveDemo.csv')
     
 
-    if (point%4 == 1 or point == 0):
-       #PC1 = data['PACKET_COUNT'][8]
-        PC1+=1
+    PC1 = data['PACKET_COUNT'][len(data)-1]
+    #print(PC1)
+    #print(data)
 
-    tPlus = data['T+ TIME']
+    tPlus = data['T+ Time']
     alt = data['ALTITUDE']
     temp = data['TEMP']
     volt = data['VOLTAGE']
     gpsLAT = data['GPS_LATITUDE']
     gpsLONG = data['GPS_LONGITUDE']
     gpsALT = data['GPS_ALTITUDE']
-    print(PC1)
-    GPS_SAT = data['GPS_SATS'][PC1-1]
-    ID = data['TEAM_ID'][PC1-1]
-    MODE = data['MODE'][PC1-1]
-    TP_DEPLOY = data['TP_RELEASED'][PC1-1]
-    SS1 = data['SOFTWARE_STATE'][PC1-1]
-    PT1 = data['PACKET_TYPE'][PC1-1]
-    CMD_ECHO = data['CMD_ECHO'][PC1-1]
+
+    GPS_SAT = data['GPS_SATS'][len(data)-1]
+    ID = data['TEAM_ID'][len(data)-1]
+    MODE = data['MODE'][len(data)-1]
+    TP_DEPLOY = data['TP_RELEASED'][len(data)-1]
+    SS1 = data['SOFTWARE_STATE'][len(data)-1]
+    PT1 = data['PACKET_TYPE'][len(data)-1]
+    CMD_ECHO = data['CMD_ECHO'][len(data)-1]
 
     _VARS['window']['PC1'].update('Packet Count 1: ' + str(PC1))
     _VARS['window']['Mode'].update('Mode: ' + MODE)
@@ -193,13 +189,19 @@ def getCanData(point):  # get data from canister csv file
     return (tPlus, alt, temp, volt, gpsLAT, gpsLONG, gpsALT)
 
 def getPayloadData():
-        data = pd.read_csv('Flight_5063_P.csv')
 
         global PC2
         global PT2
         global SS2
 
-        PC2 = data['PACKET_COUNT'][PC2]
+        if (PC2 > 28):
+            data = pd.read_csv('liveDemo.csv', header=None, names=["TEAM_ID", "MISSION_TIME", "T+ Time", "PACKET_COUNT", 
+        "PACKET_TYPE", "MODE", "TP_RELEASED", "ALTITUDE", "TEMP", "VOLTAGE", "GPS_TIME", "GPS_LATITUDE", "GPS_LONGITUDE", 
+        "GPS_ALTITUDE", "GPS_SATS", "SOFTWARE_STATE", "CMD_ECHO"], skiprows = PC2-24)
+        else:
+            data = pd.read_csv('liveDemo2.csv')
+
+        PC2 = data['PACKET_COUNT'][len(data)-1]
 
         tPlusP = data['T+ Time']
         altP = data['TP_ALTITUDE']
@@ -216,8 +218,8 @@ def getPayloadData():
         magY = data['MAG_Y']
         pe = data['POINTING_ERROR']
 
-        SS2 = data['TP_SOFTWARE_STATE'][PC2-1]
-        PT2 = data['PACKET_TYPE'][PC2-1]
+        SS2 = data['TP_SOFTWARE_STATE'][len(data)-1]
+        PT2 = data['PACKET_TYPE'][len(data)-1]
 
         _VARS['window']['PC2'].update('Packet Count 2: ' + str(PC2))
         _VARS['window']['SS2'].update('Software State 2: ' + SS2)
@@ -282,19 +284,17 @@ while (i < 10):
 #create clock to keep track of frame in order to update graph??
 #use panda to trigger new update in csv file and send to graph to update??
 
-def updateCanChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
+def updateCanChart():   #THIS TAKES ALL DATA AND GRAPHS IT
 
-    start = math.floor(start0/4)
-    end = math.floor(start0/4)+7
+    canData = getCanData()
 
-    canData = getCanData(start0)
-    canTPlus = canData[0][start:end]          #gets x values between range  THIS IS GETTING THE DATA AT PC1-7 to PC1 NOT THE ACTUAL VALUES
-    canAlt = canData[1][start:end]          #gets y values between range
-    canTemp = canData[2][start:end]
-    canVolt = canData[3][start:end]
-    gpsLat = canData[4][start:end]
-    gpsLong = canData[5][start:end]
-    gpsAlt = canData[6][start:end]
+    canTPlus = canData[0]       #gets x values between range  THIS IS GETTING THE DATA AT PC1-7 to PC1 NOT THE ACTUAL VALUES
+    canAlt = canData[1]          #gets y values between range
+    canTemp = canData[2]
+    canVolt = canData[3]
+    gpsLat = canData[4]
+    gpsLong = canData[5]
+    gpsAlt = canData[6]
 
     _VARS['pltsubFig0'].plot(canTPlus, canAlt, '-k')
 
@@ -308,35 +308,33 @@ def updateCanChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
 
     _VARS['pltsubFig7'].plot(canTPlus, gpsAlt, '-k')
 
-    #_VARS['fig_agg0'].draw()
-    #_VARS['fig_agg1'].draw()
-    #_VARS['fig_agg2'].draw()
-    #_VARS['fig_agg5'].draw()
-    #_VARS['fig_agg6'].draw()
-    #_VARS['fig_agg7'].draw()
+    _VARS['fig_agg0'].draw()
+    _VARS['fig_agg1'].draw()
+    _VARS['fig_agg2'].draw()
+    _VARS['fig_agg5'].draw()
+    _VARS['fig_agg6'].draw()
+    _VARS['fig_agg7'].draw()
 
     
 
-def updatePayloadChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
-    start  = start0
-    end = (start0+27)
+def updatePayloadChart():   #THIS TAKES ALL DATA AND GRAPHS IT
 
     payloadData = getPayloadData()
 
-    payTPlus = payloadData[0][start:end]
-    payAlt = payloadData[1][start:end]
-    payTemp = payloadData[2][start:end]
-    payVolt = payloadData[3][start:end]
-    gyroR = payloadData[4][start:end] 
-    gyroP = payloadData[5][start:end] 
-    gyroY = payloadData[6][start:end] 
-    accelR = payloadData[7][start:end] 
-    accelP = payloadData[8][start:end] 
-    accelY = payloadData[9][start:end] 
-    magR = payloadData[10][start:end] 
-    magP = payloadData[11][start:end] 
-    magY = payloadData[12][start:end] 
-    pe = payloadData[13][start:end] 
+    payTPlus = payloadData[0]
+    payAlt = payloadData[1]
+    payTemp = payloadData[2]
+    payVolt = payloadData[3]
+    gyroR = payloadData[4]
+    gyroP = payloadData[5]
+    gyroY = payloadData[6]
+    accelR = payloadData[7]
+    accelP = payloadData[8]
+    accelY = payloadData[9]
+    magR = payloadData[10]
+    magP = payloadData[11]
+    magY = payloadData[12]
+    pe = payloadData[13]
 
     _VARS['pltsubFig0'].cla()
     _VARS['pltsubFig1'].cla()
@@ -350,7 +348,7 @@ def updatePayloadChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
     _VARS['pltsubFig9'].cla()
 
 
-    updateCanChart(start0)
+    updateCanChart()
 
     _VARS['pltsubFig0'].plot(payTPlus, payAlt, '-r')
 
@@ -391,10 +389,11 @@ def updatePayloadChart(start0):   #THIS TAKES ALL DATA AND GRAPHS IT
 
 _VARS['window'].maximize()
 
-
-#updateCanChart(0,7)
-updatePayloadChart(0)
+#updatePayloadChart(0)
 i=0
+
+canFileLength = 0          #initializing values
+payloadFileLength = 0      #initializing values
 
 while True:
     event, values = _VARS['window'].read(timeout=10)
@@ -404,14 +403,23 @@ while True:
     _VARS['window']['time'].update(clock())
     _VARS['window']['gpsTime'].update('GPS Time: ' + clock())
 
-    time.sleep(.02)
+    data = pd.read_csv('liveDemo.csv', usecols = ["PACKET_COUNT"])       #checks to see if line has been added to canister csv file
+    if (len(data) >  canFileLength):
+        canFileLength = len(data)
+        updateCanChart()
+        #update can chart here or update payload since it should do both?
+
+
+    #data = pd.read_csv('liveDemo2.csv', usecols = ["PACKET_COUNT"])     #checks to see if line has been added to payload csv fle
+    #if (len(data) >  payloadFileLength):
+    #    payloadFileLength = len(data)
+    #    updatePayloadChart()
+
+
     #updateCanChart(i,i+7)
-    updatePayloadChart(i)
+    #updatePayloadChart(i)                              #not necessary once length checkers are working
     i+=1
 
 _VARS['window'].close()
 
 #https://github.com/PySimpleGUI/PySimpleGUI/tree/master/DemoPrograms
-
-#Using pandas to only read a chunk of the data that we need::
-#https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#iterating-through-files-chunk-by-chunk
